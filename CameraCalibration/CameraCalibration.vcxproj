@@ -140,10 +140,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Desktop\CV\opencv-4.7.0\samples\cpp\calibration.cpp" />
+    <ClInclude Include="..\src\Calibration.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\Calibration.h" />
+    <ClCompile Include="..\src\calibration.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
