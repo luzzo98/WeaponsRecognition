@@ -145,6 +145,9 @@
   <ItemGroup>
     <ClCompile Include="..\src\calibration.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\resources\best.onnx" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

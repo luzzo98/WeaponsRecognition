@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 
 //CALIBRATION FUNCTION
 
-enum { DETECTION = 0, CAPTURING = 1, CALIBRATED = 2, MEASURING = 3 };
+enum { DETECTION = 0, CAPTURING = 1, CALIBRATED = 2, MEASURING = 3, PROJECT = 4 };
 enum Pattern { CHESSBOARD, CIRCLES_GRID, ASYMMETRIC_CIRCLES_GRID };
 
 static double computeReprojectionErrors(

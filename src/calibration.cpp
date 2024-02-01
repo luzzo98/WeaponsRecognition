@@ -1,4 +1,3 @@
-
 #include "Calibration.h"
 
 #include "opencv2/core.hpp"
@@ -17,9 +16,11 @@
 #include <fstream>
 #include <filesystem>
 
-
 using namespace cv;
 using namespace std;
+
+#include <opencv2/opencv.hpp>
+using namespace cv::dnn;
 
 const char* usage =
 " \nexample command line for calibration from a live feed.\n"
@@ -157,8 +158,10 @@ int main(int argc, char** argv)
         help(argv);
         return 0;
     }
-    boardSize.width = parser.get<int>("w");
-    boardSize.height = parser.get<int>("h");
+    //boardSize.width = parser.get<int>("w");
+    //boardSize.height = parser.get<int>("h");
+    boardSize.width = 10;
+    boardSize.height = 7;
     if (parser.has("pt"))
     {
         string val = parser.get<string>("pt");
@@ -284,6 +287,10 @@ int main(int argc, char** argv)
     float max_re = 0;
     bool fineTuning = false;
     Mat lastView;
+
+    //********* PROGETTO *********
+    Net net;
+    net = readNetFromONNX("best.onnx");
 
     //################################################################ CICLO INFINITO ################################################################
     for (i = 0;; i++)
@@ -505,7 +512,7 @@ int main(int argc, char** argv)
         }
 
         if (found) {
-            msg += cv::format(" camDist=%.2f mm (%.2f", dist, cv::norm(t));
+            msg = cv::format("d=%.2f mm (%.2f)", dist, cv::norm(t));
         }
 
         // aggiunta 4
@@ -564,6 +571,11 @@ int main(int argc, char** argv)
             imagePoints.clear();
         }
 
+        if (key == 'w' && mode != PROJECT)
+        {
+            mode = PROJECT;
+            cout << "MODALITà Progetto" << endl;
+        }
 
         if (mode == CAPTURING && imagePoints.size() >= (unsigned)nframes)
         {
