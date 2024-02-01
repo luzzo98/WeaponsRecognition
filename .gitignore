@@ -430,7 +430,7 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-
+*.vcxproj
 x64/*
 !x64/Release/
 x64/Release/*
