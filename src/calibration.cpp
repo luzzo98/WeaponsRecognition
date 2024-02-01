@@ -1,5 +1,3 @@
-#include "Calibration.h"
-
 #include "opencv2/core.hpp"
 #include <opencv2/core/utility.hpp>
 #include "opencv2/imgproc.hpp"
@@ -7,6 +5,7 @@
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/videoio.hpp"
 #include "opencv2/highgui.hpp"
+#include <opencv2/opencv.hpp>
 
 #include <cctype>
 #include <stdio.h>
@@ -18,9 +17,10 @@
 
 using namespace cv;
 using namespace std;
-
-#include <opencv2/opencv.hpp>
 using namespace cv::dnn;
+
+#include "Calibration.h"
+#include "net_utils.h"
 
 const char* usage =
 " \nexample command line for calibration from a live feed.\n"
@@ -290,7 +290,7 @@ int main(int argc, char** argv)
 
     //********* PROGETTO *********
     Net net;
-    net = readNetFromONNX("best.onnx");
+    net = readNetFromONNX("weights_net.onnx");
 
     //################################################################ CICLO INFINITO ################################################################
     for (i = 0;; i++)
@@ -575,7 +575,72 @@ int main(int argc, char** argv)
         if (key == 'w' && mode != PROJECT)
         {
             mode = PROJECT;
-            cout << "MODALITà Progetto" << endl;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            vector<Mat> detections;
+            detections = pre_process(view, net);
+
+            Mat temp = view.clone();
+            Mat img = post_process(temp, detections);
+
+            // Put efficiency information.
+            // The function getPerfProfile returns the overall time for inference(t) and the timings for each of the layers(in layersTimes)
+
+            vector<double> layersTimes;
+            double freq = getTickFrequency() / 1000;
+            double t = net.getPerfProfile(layersTimes) / freq;
+            string label = cv::format("Inference time : %.2f ms", t);
+            putText(img, label, Point(20, 420), FONT_FACE, FONT_SCALE, RED);
+
+            imshow("Output", img);
+            waitKey(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
 
         if (mode == CAPTURING && imagePoints.size() >= (unsigned)nframes)

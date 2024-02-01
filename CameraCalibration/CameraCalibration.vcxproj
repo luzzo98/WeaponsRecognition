@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Calibration.h" />
+    <ClInclude Include="..\src\net_utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\calibration.cpp" />
