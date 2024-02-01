@@ -571,6 +571,7 @@ int main(int argc, char** argv)
             imagePoints.clear();
         }
 
+        // *************** PROGETTO ***************
         if (key == 'w' && mode != PROJECT)
         {
             mode = PROJECT;
