@@ -528,21 +528,22 @@ int main(int argc, char** argv)
 
         if (blink)
             bitwise_not(view, view);
-
-        if (mode == CALIBRATED && undistortImage)
-        {
-            Mat temp = view.clone();
-            undistort(temp, view, cameraMatrix, distCoeffs);
-        }
-        if (viewScaleFactor > 1)
-        {
-            Mat viewScale;
-            resize(view, viewScale, Size(), 1.0 / viewScaleFactor, 1.0 / viewScaleFactor, INTER_AREA);
-            imshow("Image View", viewScale);
-        }
-        else
-        {
-            imshow("Image View", view);
+        if (mode != PROJECT) {
+            if (mode == CALIBRATED && undistortImage)
+            {
+                Mat temp = view.clone();
+                undistort(temp, view, cameraMatrix, distCoeffs);
+            }
+            if (viewScaleFactor > 1)
+            {
+                Mat viewScale;
+                resize(view, viewScale, Size(), 1.0 / viewScaleFactor, 1.0 / viewScaleFactor, INTER_AREA);
+                imshow("Image View", viewScale);
+            }
+            else
+            {
+                imshow("Image View", view);
+            }
         }
 
         key = (char)waitKey(capture.isOpened() ? 50 : 500);
@@ -572,7 +573,7 @@ int main(int argc, char** argv)
         }
 
         // *************** PROGETTO ***************
-        if (key == 'w' && mode != PROJECT)
+        if (key == 'w' || mode == PROJECT)
         {
             mode = PROJECT;
 
@@ -594,12 +595,16 @@ int main(int argc, char** argv)
 
 
 
-
+            int down_width = 640;
+            int down_height = 640;
+            Mat resized;
+            //resize down
+            resize(view, resized, Size(down_width, down_height), INTER_LINEAR);
 
             vector<Mat> detections;
-            detections = pre_process(view, net);
+            detections = pre_process(resized, net);
 
-            Mat temp = view.clone();
+            Mat temp = resized.clone();
             Mat img = post_process(temp, detections);
 
             // Put efficiency information.
@@ -611,8 +616,7 @@ int main(int argc, char** argv)
             string label = cv::format("Inference time : %.2f ms", t);
             putText(img, label, Point(20, 420), FONT_FACE, FONT_SCALE, RED);
 
-            imshow("Output", img);
-            waitKey(0);
+            imshow("Image View", img);
 
 
 
@@ -657,7 +661,7 @@ int main(int argc, char** argv)
         }
     }
 
-    if (!capture.isOpened() && showUndistorted)
+    if (!capture.isOpened() && showUndistorted && mode != PROJECT)
     {
         Mat view, rview, map1, map2;
         initUndistortRectifyMap(cameraMatrix, distCoeffs, Mat(),

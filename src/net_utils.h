@@ -1,7 +1,10 @@
 // Constants.
 const float INPUT_WIDTH = 640.0;
 const float INPUT_HEIGHT = 640.0;
+
 const float SCORE_THRESHOLD = 0.5;
+//const float SCORE_THRESHOLD = 7;
+
 const float NMS_THRESHOLD = 0.45;
 const float CONFIDENCE_THRESHOLD = 0.45;
 
@@ -48,7 +51,8 @@ static vector<Mat> pre_process(Mat &input_image, Net &net)
 
     // Forward propagate.
     vector<Mat> outputs;
-    net.forward(outputs, net.getUnconnectedOutLayersNames());
+    net.forward(outputs);
+    //net.forward(outputs, net.getUnconnectedOutLayersNames());
 
     return outputs;
 }
@@ -97,11 +101,20 @@ static Mat post_process(Mat &input_image, vector<Mat> &outputs)
                 // Box dimension.
                 float w = data[2];
                 float h = data[3];
+
+
                 // Bounding box coordinates.
+                //int left = int((cx - 0.5 * w) * x_factor)*50;
+                //int top = int((cy - 0.5 * h) * y_factor)*50;
+                //int width = int(w * x_factor)*50;
+                //int height = int(h * y_factor)*50;
+
                 int left = int((cx - 0.5 * w) * x_factor);
                 int top = int((cy - 0.5 * h) * y_factor);
                 int width = int(w * x_factor);
                 int height = int(h * y_factor);
+
+
                 // Store good detections in the boxes vector.
                 boxes.push_back(Rect(left, top, width, height));
             }
@@ -129,7 +142,7 @@ static Mat post_process(Mat &input_image, vector<Mat> &outputs)
         // Get the label for the class name and its confidence.
         string label = cv::format("%.2f", confidences[idx]);
         label = class_name[class_ids[idx]] + ":" + label;
-        cout << label << endl;
+        //cout << label << endl;
         // Draw class labels.
         draw_label(input_image, label, left, top);
     }
